@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TenantConnectionMiddleware
+class SetTenantMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class TenantConnectionMiddleware
     {
         // 1. Get tenant identifier from request
         $host = $request->getHost();
-        $explodedHost = explode('.', str_replace(['http://', 'https://'], '', $host));
+        // $explodedHost = explode('.', str_replace(['http://', 'https://'], '', $host));
 
         $tenantId = $request->route('tenant') ?? $request->header('X-Tenant-Id');
         if (!$tenantId && count($explodedHost) > 2) {
@@ -34,6 +34,7 @@ class TenantConnectionMiddleware
         $tenant = DB::connection('landlord')
                     ->table('tenants')
                     ->where('uuid', $tenantId)
+                    ->orWhere('name', $tenantId)
                     ->first();
 
         // Check if tenant exists
@@ -41,10 +42,15 @@ class TenantConnectionMiddleware
             return $this->terminate($request, 404);
         }
 
+        $request->merge(['tenant' => $tenant]);
+
         // 3. Configure and set the tenant's database connection
         config(['database.connections.tenant.database' => $tenant->db_name]);
         config(['database.connections.tenant.host' => $tenant->db_host]);
-        // ... set other details
+
+        // config(['database.connections.tenant.port' => $tenant->db_port]);
+        // config(['database.connections.tenant.username' => $tenant->db_username]);
+        // config(['database.connections.tenant.password' => $tenant->db_password]);
 
         DB::setDefaultConnection('tenant');
        
