@@ -1,0 +1,61 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('connections', function (Blueprint $table) {
+            $table->id();
+            $table->uuid('uuid')->default(DB::raw('(UUID())'))
+                ->comment('string representation to uniquely identify this entity');
+            $table->uuid('tenant_uuid')
+                ->comment('string representation to uniquely identify this entity');
+            $table->string('db_name')
+                ->unique()
+                ->comment('the name of the database for this tenant');
+            $table->string('db_host')
+                ->default('localhost')
+                ->comment('the host of the database for this tenant');
+            $table->string('db_username')
+                ->default('root')
+                ->comment('the username for the database connection');
+            $table->string('db_password')
+                ->default('password')
+                ->comment('the password for the database connection');
+            $table->string('db_port')
+                ->default('3306')
+                ->comment('the port for the database connection');
+            $table->string('db_driver')
+                ->default('mysql')
+                ->comment('the driver for the database connection');
+            $table->string('db_charset')
+                ->default('utf8mb4')
+                ->comment('the charset for the database connection');
+            $table->string('db_collation')
+                ->default('utf8mb4_unicode_ci')
+                ->comment('the collation for the database connection');
+            $table->string('db_prefix')
+                ->default('')
+                ->comment('the prefix for the database tables');
+            $table->string('db_engine')
+                ->default('InnoDB')
+                ->comment('the storage engine for the database tables');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('connections');
+    }
+};
