@@ -27,7 +27,7 @@ class SetTenantMiddleware
         
         $explodedHost = explode('.', $host);
 
-        $tenantId = $request->route('tenant') ?? $request->header('X-Tenant-Id');
+        $tenantId = $request->tenant ?? $request->header('X-Tenant-Id');
         if (!$tenantId && count($explodedHost) > 2 && $host !== '127.0.0.1') {
             // Assuming the tenant identifier is the first part of the subdomain
             $tenantId = implode('.', array_slice($explodedHost, 0, -2));

@@ -24,6 +24,17 @@ This design, while highly secure, comes with some trade-offs:
 
 - No Cross-Tenant Queries: Performing aggregate queries or analytics across all tenants is not possible directly from this API. It requires a separate data warehouse or a dedicated aggregation service.
 
+### ⚖️ Tenant selections
+Some endpoints are meant to be accessed only by tenants. This endpoints are guarded by a group middleware. They are meant to be queried by any of the following:
+
+- Using the subdomain of the tenant.
+
+- Or passing an header value of **X-Tenant-Id: The_Tenant_UUID**.
+
+- Or by passing **tenant** in the query param e.g ?tenant=The_Tenant_UUID.
+
+Other endpoints are open
+
 
 # 🚀 Getting Started
 ## Build application locally
