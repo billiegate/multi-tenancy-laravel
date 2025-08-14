@@ -33,10 +33,10 @@ This design, while highly secure, comes with some trade-offs:
 
 ### Start by cloning the repository 
 
-``` git clone https://github.com/billiegate/multi-tenancy-laravel.git
-``` cd multi-tenancy-laravel
-``` cp .env.example .env
-``` touch ./database/database.sqlite
+``` git clone https://github.com/billiegate/multi-tenancy-laravel.git``` 
+``` cd multi-tenancy-laravel``` 
+``` cp .env.example .env``` 
+``` touch ./database/database.sqlite``` 
 
 ### Install dependencies
 composer install
