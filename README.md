@@ -77,12 +77,12 @@ php artisan key:generate
 
 ### Run application migration
 ```bash
-php artisan migrate --path=database/migrations/landlord --database=landlord
+php artisan migrate --path=database/migrations/landlord --database=landlord --force
 ```
 
 ### Refresh application migration (if you need to)
 ```bash
-php artisan migrate:refresh --path=database/migrations/landlord --database=landlord
+php artisan migrate:refresh --path=database/migrations/landlord --database=landlord --force
 ```
 
 ## Build and run yourself

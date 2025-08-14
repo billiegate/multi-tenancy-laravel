@@ -33,7 +33,7 @@ RUN touch ./database/database.sqlite
 # set up project
 RUN composer install
 RUN php artisan key:generate
-RUN php artisan migrate --path=database/migrations/landlord --database=landlord
+RUN php artisan migrate --path=database/migrations/landlord --database=landlord --force
 # RUN php artisan optimize:clear
 
 RUN npm install
