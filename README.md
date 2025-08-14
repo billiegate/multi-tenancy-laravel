@@ -13,3 +13,5 @@ php artisan tenant:migrate
 run migration for one vender
 php artisan tenant:migrate 1
 
+
+https://documenter.getpostman.com/view/5296421/2sB3BGHpZm
