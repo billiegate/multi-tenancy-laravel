@@ -13,9 +13,6 @@ Strong Data Isolation: We chose the database-per-tenant model to prevent data le
 Dynamic Database Switching: The backend uses middleware to dynamically switch the database connection based on the incoming request. This ensures that every request, after authentication, operates within the correct tenant's database context.
 
 
-Centralized Authentication: Authentication is handled by a central user system (using Laravel Sanctum) that maps a user to a specific vendor. This simplifies login and token management.
-
-
 Automated Tenant Management: We’ve designed a system with custom Artisan commands to automate the onboarding and migration process for new and existing tenants, a critical feature for a managed SaaS offering.
 
 ### ⚖️ Trade-offs
@@ -34,19 +31,19 @@ This design, while highly secure, comes with some trade-offs:
 ### Start by cloning the repository 
 
 ```bash
-    git clone https://github.com/billiegate/multi-tenancy-laravel.git
+git clone https://github.com/billiegate/multi-tenancy-laravel.git
 ```
 
 ```bash
-    cd multi-tenancy-laravel
+cd multi-tenancy-laravel
 ```
 
 ```bash
-    cp .env.example .env
+cp .env.example .env
 ```
 
 ```bash
-    touch ./database/database.sqlite
+touch ./database/database.sqlite
 ```
 
 ### Install dependencies
