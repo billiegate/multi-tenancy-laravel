@@ -42,3 +42,6 @@ php artisan tenant:migrate 1
 
 ## Api Documentation
 https://documenter.getpostman.com/view/5296421/2sB3BGHpZm
+
+## Application URL
+https://multitenant-latest.onrender.com
