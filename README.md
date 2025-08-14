@@ -59,22 +59,22 @@ RUN npm install
 RUN npm run build
 ```
 
-### set up project
+### Set up project
 ```bash
 php artisan key:generate
 ```
 
-### run application migration
+### Run application migration
 ```bash
 php artisan migrate --path=database/migrations/landlord --database=landlord
 ```
 
-### refresh application migration if you need to
+### Refresh application migration (if you need to)
 ```bash
 php artisan migrate:refresh --path=database/migrations/landlord --database=landlord
 ```
 
-## build and run yourself
+## Build and run yourself
 ```bash
 docker build -t multitenant .
 ```
@@ -82,20 +82,20 @@ docker build -t multitenant .
 docker run -it -p 8000:8000 multitenant
 ```
 
-## run already built version
+## Run already built version
 ```bash
 docker run -it -p 8000:8000 toppy44/multitenant
 ```
 ## Commands
-### onboard a new vendor
+### Onboard a new vendor
 ```bash
 php artisan tenant:onboard Tenant1
 ```
-### run migration for all vendor
+### Run migration for all vendor
 ```bash
 php artisan tenant:migrate
 ```
-### run migration for one vender
+### Run migration for one vender
 ```bash
 php artisan tenant:migrate 1
 ```
