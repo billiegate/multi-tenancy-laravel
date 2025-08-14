@@ -33,49 +33,83 @@ This design, while highly secure, comes with some trade-offs:
 
 ### Start by cloning the repository 
 
-```git clone https://github.com/billiegate/multi-tenancy-laravel.git
+```bash
+    git clone https://github.com/billiegate/multi-tenancy-laravel.git
+```
 
-```cd multi-tenancy-laravel
+```bash
+    cd multi-tenancy-laravel
+```
 
-```cp .env.example .env
+```bash
+    cp .env.example .env
+```
 
-```touch ./database/database.sqlite
+```bash
+    touch ./database/database.sqlite
+```
 
 ### Install dependencies
+```bash
 composer install
+```
+
+```bash
 RUN npm install
+```
+
+```bash
 RUN npm run build
+```
 
 ### set up project
+```bash
 php artisan key:generate
-
+```
 
 ### run application migration
-php artisan migrate --path=database/migrations/landlord --database=landlord  
+```bash
+php artisan migrate --path=database/migrations/landlord --database=landlord
+```
 
 ### refresh application migration if you need to
+```bash
 php artisan migrate:refresh --path=database/migrations/landlord --database=landlord
-
+```
 
 ## build and run yourself
+```bash
 docker build -t multitenant .
+```
+```bash
 docker run -it -p 8000:8000 multitenant
+```
 
 ## run already built version
+```bash
 docker run -it -p 8000:8000 toppy44/multitenant
-
+```
 ## Commands
 ### onboard a new vendor
+```bash
 php artisan tenant:onboard Tenant1
-
+```
 ### run migration for all vendor
+```bash
 php artisan tenant:migrate
-
+```
 ### run migration for one vender
+```bash
 php artisan tenant:migrate 1
-
+```
 ## Api Documentation
 https://documenter.getpostman.com/view/5296421/2sB3BGHpZm
 
 ## Application URL
 https://multitenant-latest.onrender.com
+
+---
+
+## 🧑‍💻 Author
+Afolabi Tope
+
