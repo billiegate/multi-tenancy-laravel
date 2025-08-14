@@ -12,11 +12,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-         $middleware->append(SetTenantMiddleware::class);
-         $middleware->alias([
-            'use-tenant' => SetTenantMiddleware::class
+        $middleware->appendToGroup('use-tenant', [
+            SetTenantMiddleware::class
+        ]);
+        $middleware->validateCsrfTokens(except: [
+            '*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    // ->withCommands([
+    //     App\Console\Commands\TenantOnboard::class,
+    //     App\Console\Commands\TenantMigrate::class,
+    // ])
+    ->create();

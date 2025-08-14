@@ -5,9 +5,16 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
+use App\Models\Landlord\Tenant;
 
+/**
+ * SetTenantMiddleware is responsible for identifying the tenant based on the request
+ * and setting the appropriate database connection for multi-tenancy.
+ */
 class SetTenantMiddleware
 {
+    use \App\Traits\Connection;
     /**
      * Handle an incoming request.
      *
@@ -17,53 +24,49 @@ class SetTenantMiddleware
     {
         // 1. Get tenant identifier from request
         $host = $request->getHost();
-        // $explodedHost = explode('.', str_replace(['http://', 'https://'], '', $host));
+        
+        $explodedHost = explode('.', $host);
 
         $tenantId = $request->route('tenant') ?? $request->header('X-Tenant-Id');
-        if (!$tenantId && count($explodedHost) > 2) {
+        if (!$tenantId && count($explodedHost) > 2 && $host !== '127.0.0.1') {
             // Assuming the tenant identifier is the first part of the subdomain
             $tenantId = implode('.', array_slice($explodedHost, 0, -2));
         }
 
         if (!$tenantId) {
             // Handle missing tenant identifier
-            return $this->terminate($request, 403);
+            return $this->terminateRequest($request, 403);
         }
 
         // 2. Find tenant in landlord database
-        $tenant = DB::connection('landlord')
-                    ->table('tenants')
+        $tenant = Tenant::with(['connection'])
                     ->where('uuid', $tenantId)
-                    ->orWhere('name', $tenantId)
+                    ->orWhere('subdomain', $tenantId)
                     ->first();
 
         // Check if tenant exists
         if (!$tenant) {
-            return $this->terminate($request, 404);
+            return $this->terminateRequest($request, 404);
         }
 
-        $request->merge(['tenant' => $tenant]);
+        $request->merge(['tenant' => json_encode($tenant)]);
 
         // 3. Configure and set the tenant's database connection
-        config(['database.connections.tenant.database' => $tenant->db_name]);
-        config(['database.connections.tenant.host' => $tenant->db_host]);
-
-        // config(['database.connections.tenant.port' => $tenant->db_port]);
-        // config(['database.connections.tenant.username' => $tenant->db_username]);
-        // config(['database.connections.tenant.password' => $tenant->db_password]);
-
-        DB::setDefaultConnection('tenant');
+        $this->connect($tenant);
        
         return $next($request);
     }
 
     /**
-     * Terminate the middleware.
+     * TerminateRequest the middleware.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return void
+     * @return response
+     * @param  int  $status
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
-    public function terminate(Request $request, int $status = 404): void    
+    public function terminateRequest(Request $request, int $status = 404): response  
     {
         if ($request->wantsJson()) {
             return response()->json([

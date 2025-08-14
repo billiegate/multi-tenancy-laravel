@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -48,6 +49,16 @@ return new class extends Migration
                 ->default('InnoDB')
                 ->comment('the storage engine for the database tables');
             $table->timestamps();
+            $table->softDeletes()
+                ->comment('soft delete column to mark the connection as deleted without removing it from the database');
+            $table->comment('This table stores the database connection details for each tenant.');
+
+            $table->unique(['tenant_uuid', 'db_name'], 'tenant_db_unique')
+                ->comment('unique constraint to ensure a tenant can only have one database with a specific name');
+            $table->index('db_name', 'db_name_index')
+                ->comment('index to speed up queries filtering by database name');
+            $table->index('db_host', 'db_host_index')
+                ->comment('index to speed up queries filtering by database host');
         });
     }
 
