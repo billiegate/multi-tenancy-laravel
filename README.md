@@ -14,4 +14,8 @@ run migration for one vender
 php artisan tenant:migrate 1
 
 
+docker build -t multitenant .
+
+docker run -it -p 8000:8000 multitenant
+
 https://documenter.getpostman.com/view/5296421/2sB3BGHpZm
